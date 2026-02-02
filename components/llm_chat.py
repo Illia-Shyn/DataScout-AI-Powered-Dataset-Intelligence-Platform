@@ -122,3 +122,18 @@ class DataChat:
                 'answer': f"Error communicating with Ollama: {str(e)}. Please ensure Ollama is running.",
                 'confidence': 'Low'
             }
+
+    def debug_context(self) -> dict:
+        """Returns context info for debugging."""
+        context = self.build_context_prompt()
+        
+        # Approximate token count (rough: 1 token ≈ 4 chars)
+        approx_tokens = len(context) // 4
+        
+        return {
+            'char_count': len(context),
+            'approx_tokens': approx_tokens,
+            'line_count': context.count('\n'),
+            'context_preview': context[:500] + "\n...\n" + context[-500:],
+            'full_context': context  # For detailed inspection
+        }

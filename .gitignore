@@ -1,0 +1,34 @@
+# basic python gitignore
+__pycache__/
+*.py[cod]
+*$py.class
+
+# environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/
+
+# Streamlit
+.streamlit/secrets.toml
+
+# IDE settings
+.vscode/
+.idea/
+
+# Local data (optional, but good practice if you don't want to push large CSVs)
+# demo_data/  <-- Uncomment if you want to ignore the demo data specifically
+*.csv
+*.xlsx
+*.parquet
+
+# Logs
+*.log

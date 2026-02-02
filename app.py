@@ -156,8 +156,13 @@ def main():
         # Details
         st.subheader("Anomalous Records")
         flagged_df = anomalies['flagged_rows']
+        
         if not flagged_df.empty:
-            st.dataframe(flagged_df.style.apply(lambda x: ['background-color: #ffd7d7' if x.name in flagged_df.index else '' for i in x], axis=1))
+            # Reorder columns to put 'anomaly_reason' first or near valid data
+            cols = ['anomaly_reason'] + [c for c in flagged_df.columns if c != 'anomaly_reason' and c != 'is_anomaly']
+            st.dataframe(
+                flagged_df[cols].style.apply(lambda x: ['background-color: #ffd7d7' for i in x], axis=1)
+            )
         else:
             st.success("No significant anomalies detected.")
 
@@ -168,23 +173,43 @@ def main():
         # Initialize Chat Interface
         chat_engine = DataChat(df, profile, anomalies, model_name=model_name)
         
+        # Debug Context
+        if st.checkbox("Show LLM Context (Debug)"):
+            debug = chat_engine.debug_context()
+            c1, c2, c3 = st.columns(3)
+            c1.write(f"**Chars:** {debug['char_count']}")
+            c2.write(f"**~Tokens:** {debug['approx_tokens']}")
+            c3.write(f"**Lines:** {debug['line_count']}")
+            with st.expander("View Full Context"):
+                st.code(debug['full_context'])
+
+        # Container for chat history
+        chat_container = st.container(height=500)
+        
         # Display History
-        for msg in st.session_state.chat_history:
-            with st.chat_message(msg["role"]):
-                st.markdown(msg["content"])
+        with chat_container:
+            for msg in st.session_state.chat_history:
+                with st.chat_message(msg["role"]):
+                    st.markdown(msg["content"])
         
         # Input
         if prompt := st.chat_input("Ask a question about your data..."):
+            # 1. Add User Message
             st.session_state.chat_history.append({"role": "user", "content": prompt})
-            with st.chat_message("user"):
-                st.markdown(prompt)
+            with chat_container:
+                with st.chat_message("user"):
+                    st.markdown(prompt)
+                
+                # 2. Add Assistant Message
+                with st.chat_message("assistant"):
+                    with st.spinner("Thinking..."):
+                        response = chat_engine.ask(prompt)
+                        answer = response['answer']
+                        st.markdown(answer)
             
-            with st.chat_message("assistant"):
-                with st.spinner("Thinking..."):
-                    response = chat_engine.ask(prompt)
-                    answer = response['answer']
-                    st.markdown(answer)
-                    st.session_state.chat_history.append({"role": "assistant", "content": answer})
+            st.session_state.chat_history.append({"role": "assistant", "content": answer})
+
+
 
 if __name__ == "__main__":
     main()
