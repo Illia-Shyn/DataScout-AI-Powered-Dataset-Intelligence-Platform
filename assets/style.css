@@ -1,31 +1,150 @@
-/* Main container padding */
-.main {
-    padding-top: 2rem;
+/* Color Variables */
+:root {
+    --primary: #1e3a5f;
+    /* Deep navy - headers, sidebar */
+    --secondary: #3d5a80;
+    /* Lighter navy - buttons, accents */
+    --accent: #ee6c4d;
+    /* Warm coral - highlights, alerts */
+    --background: #f8f9fa;
+    /* Off-white - main background */
+    --surface: #ffffff;
+    /* White - cards, containers */
+    --text-primary: #1e1e1e;
+    /* Near-black - body text */
+    --text-secondary: #6c757d;
+    /* Gray - secondary text */
 }
 
-/* Metric cards customization */
+/* Global Typography */
+html,
+body,
+[class*="css"] {
+    font-family: 'Source Sans Pro', 'Helvetica Neue', sans-serif;
+    color: var(--text-primary);
+    background-color: var(--background);
+}
+
+h1,
+h2,
+h3 {
+    font-family: 'Inter', 'Segoe UI', sans-serif;
+    color: var(--primary);
+    font-weight: 700;
+}
+
+code {
+    font-family: 'JetBrains Mono', 'Consolas', monospace;
+}
+
+/* Sidebar Customization */
+[data-testid="stSidebar"] {
+    background-color: var(--primary);
+}
+
+[data-testid="stSidebar"] h1,
+[data-testid="stSidebar"] h2,
+[data-testid="stSidebar"] h3,
+[data-testid="stSidebar"] label,
+[data-testid="stSidebar"] .stMarkdown {
+    color: #ffffff !important;
+}
+
+/* Metric Cards */
 [data-testid="stMetricValue"] {
-    font-size: 24px;
-    font-weight: bold;
-    color: #0066cc;
+    font-family: 'Inter', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--primary);
 }
 
-/* Tab styling */
+[data-testid="stMetricLabel"] {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+/* Primary Button Styling */
+div.stButton>button:first-child {
+    background-color: var(--secondary);
+    color: white;
+    font-weight: 600;
+    border-radius: 6px;
+    border: none;
+    transition: all 0.2s ease;
+}
+
+div.stButton>button:first-child:hover {
+    background-color: var(--accent);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Tabs Styling */
 .stTabs [data-baseweb="tab-list"] {
     gap: 24px;
+    border-bottom: 2px solid #e0e0e0;
 }
 
 .stTabs [data-baseweb="tab"] {
     height: 50px;
     white-space: pre-wrap;
     background-color: transparent;
-    border-radius: 4px;
-    color: #4a4a4a;
+    border: none;
+    color: var(--text-secondary);
+    font-family: 'Inter', sans-serif;
     font-size: 16px;
     font-weight: 600;
 }
 
 .stTabs [aria-selected="true"] {
-    background-color: #f0f2f6;
-    color: #0066cc;
+    color: var(--primary);
+    border-bottom: 3px solid var(--accent);
+}
+
+/* Dataframe/Table Styling */
+[data-testid="stDataFrame"] {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+/* Streamlit Containers styling (cards) */
+[data-testid="stVerticalBlock"]>[style*="flex-direction: column;"]>[data-testid="stVerticalBlock"] {
+    background-color: var(--surface);
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* Custom Alert/Success/Info Boxes */
+.stAlert {
+    border-radius: 8px;
+    border: none;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+/* Fix for Sidebar File Uploader Text Contrast */
+
+/* Fix for Sidebar File Uploader Text Contrast */
+
+/* 1. Base rule: All text in the uploader wrapper should be white */
+[data-testid="stSidebar"] [data-testid="stFileUploader"] label,
+[data-testid="stSidebar"] [data-testid="stFileUploader"] div,
+[data-testid="stSidebar"] [data-testid="stFileUploader"] span,
+[data-testid="stSidebar"] [data-testid="stFileUploader"] small,
+[data-testid="stSidebar"] [data-testid="stFileUploader"] p {
+    color: #ffffff !important;
+}
+
+/* 2. Exception: The 'Browse files' button itself */
+[data-testid="stSidebar"] [data-testid="stFileUploader"] button {
+    background-color: #ffffff !important;
+    border: none;
+    color: #000000 !important;
+    /* Force Black Text */
+}
+
+/* 3. Force all children of the button to be black too */
+[data-testid="stSidebar"] [data-testid="stFileUploader"] button * {
+    color: #000000 !important;
 }
